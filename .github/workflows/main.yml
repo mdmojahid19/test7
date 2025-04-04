@@ -1,0 +1,24 @@
+name: Sync Repository
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync_repo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source repo
+      uses: actions/checkout@v2
+      with:
+        repository: mdmojahid19/test7
+        ref: main
+
+    - name: Sync to target repo
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git remote add target https://mdmojahid20:${{ secrets.PAT_FOR_GIT }}@github.com/mdmojahid20/test7.git
+        git push target main --force
