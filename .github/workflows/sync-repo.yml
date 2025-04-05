@@ -1,4 +1,6 @@
-name: Sync Repository
+
+# .github/workflows/send-webhook.yml
+name: Send Webhook to Repo B
 
 on:
   push:
@@ -6,19 +8,13 @@ on:
       - main
 
 jobs:
-  sync_repo:
+  trigger:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout source repo
-      uses: actions/checkout@v2
-      with:
-        repository: mdmojahid19/test7
-        ref: main
+      - name: Send repository_dispatch to Repo B
+        run: |
+          curl -X POST https://api.github.com/repos/mdmojahid20/test7/dispatches \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: token ${{ secrets.PAT_FOR_GIT }}" \
+          -d '{"event_type":"sync-code"}'
 
-    - name: Sync to target repo
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git remote add target https://mdmojahid20:${{ secrets.PAT_FOR_GIT }}@github.com/mdmojahid20/test7.git
-        git push target main --force
