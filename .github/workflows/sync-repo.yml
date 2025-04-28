@@ -1,6 +1,6 @@
 
 # .github/workflows/send-webhook.yml
-name: Send Webhook to Repo B
+name: Send Webhook to Repo B of another account
 
 on:
   push:
